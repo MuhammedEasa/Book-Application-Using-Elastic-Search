@@ -1,7 +1,8 @@
-import { IBookRepository } from './IBookRepository';
-import Book, { IBook } from '../models/Book';
-import elasticClient from '../config/elasticsearch';
-import client from '../config/elasticsearch';
+import { IBookRepository } from "./IBookRepository";
+import Book, { IBook } from "../models/Book";
+import elasticClient from "../config/elasticsearch";
+
+const ELASTICSEARCH_INDEX = "books";
 
 export class MongoBookRepository implements IBookRepository {
   async findAll(): Promise<IBook[]> {
@@ -35,71 +36,63 @@ export class MongoBookRepository implements IBookRepository {
     return false;
   }
 
-  async  search(data: string) {
+  async search(data: string): Promise<Partial<IBook>[]> {
     const query = {
-      _source: [],
-      size: 0,
+      size: 25,
       min_score: 0.5,
       query: {
-        bool: {
-          must: [
-            {
-              match_phrase_prefix: {
-                title: {
-                  query: data
-                }
-              }
-            }
-          ]
-        }
+        match_phrase_prefix: {
+          title: {
+            query: data,
+          },
+        },
       },
-      aggs: {
-        auto_complete: {
-          terms: {
-            field: 'title.keyword',
-            order: {
-              _count: 'desc' as 'asc' | 'desc'  
-            },
-            size: 25
-          }
-        }
-      }
     };
-  
+
     try {
-      const result = await client.search({
-        index: 'myelkfirst',
-        body: query
+      const result = await elasticClient.search({
+        index: ELASTICSEARCH_INDEX,
+        body: query,
       });
-  
-      return result.hits.hits;
+
+      return result.hits.hits.map((hit: any) => ({
+        _id: hit._id,
+        title: hit._source.title,
+        author: hit._source.author,
+        description: hit._source.description,
+      }));
     } catch (error) {
-      console.error('Error fetching data:', error);
-      return; 
+      console.error("Error fetching data:", error);
+      throw new Error("Failed to perform search");
     }
   }
-  
-  private async indexBook(book: IBook) {
+
+  private async indexBook(book: IBook): Promise<void> {
     try {
       await elasticClient.index({
-        index: 'books',
-        id: (book._id as any).toString(), 
+        index: ELASTICSEARCH_INDEX,
+        id: (book._id as any).toString(),
         body: {
           title: book.title,
           author: book.author,
-          description: book.description
-        }
+          description: book.description,
+        },
       });
     } catch (error) {
-      console.error('Error indexing book:', error);
+      console.error("Error indexing book:", error);
+      throw new Error("Failed to index book");
     }
   }
-  
 
-  private async removeBookFromIndex(id: string) {
-    await elasticClient.delete({
-      index: 'books',
-      id
-    });
+  private async removeBookFromIndex(id: string): Promise<void> {
+    try {
+      await elasticClient.delete({
+        index: ELASTICSEARCH_INDEX,
+        id,
+      });
+    } catch (error) {
+      console.error("Error removing book from index:", error);
+      throw new Error("Failed to remove book from index");
+    }
   }
 }

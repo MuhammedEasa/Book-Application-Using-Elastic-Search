@@ -3,8 +3,8 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const client = new Client({
+const elasticClient = new Client({
   node: process.env.ELASTICSEARCH_NODE 
 });
 
-export default client;
+export default elasticClient;
