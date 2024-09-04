@@ -22,7 +22,7 @@ const SearchComponent: React.FC = () => {
     setError(null);
 
     try {
-      const response = await axios.post('http://localhost:4000/autocomplete', { data: value });
+      const response = await axios.post('http://localhost:5000/autocomplete', { data: value });
       const data = response.data.aggregations.auto_complete.buckets;
       const suggestions = data.map((item: any) => item.key);
       setSuggestions(suggestions);
