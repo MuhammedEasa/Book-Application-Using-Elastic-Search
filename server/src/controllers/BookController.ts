@@ -29,7 +29,8 @@ export class BookController {
 
   async createBook(req: Request, res: Response): Promise<void> {
     try {
-      const book = await this.bookService.createBook(req.body);
+      const image = req.file 
+      const book = await this.bookService.createBook(req.body,image);
       res.status(201).json(book);
     } catch (error) {
       res.status(500).json({ error: 'Internal server error' });

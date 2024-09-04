@@ -13,7 +13,8 @@ export class MongoBookRepository implements IBookRepository {
     return Book.findById(id);
   }
 
-  async create(book: IBook): Promise<IBook> {
+  async create(book: IBook, image: any): Promise<IBook> {
+    book.image = image;
     const newBook = await Book.create(book);
     await this.indexBook(newBook);
     return newBook;

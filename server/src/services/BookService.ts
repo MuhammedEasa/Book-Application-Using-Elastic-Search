@@ -12,8 +12,8 @@ export class BookService {
     return this.bookRepository.findById(id);
   }
 
-  async createBook(book: IBook): Promise<IBook> {
-    return this.bookRepository.create(book);
+  async createBook(book: IBook,image:any): Promise<IBook> {
+    return this.bookRepository.create(book,image);
   }
 
   async updateBook(id: string, book: Partial<IBook>): Promise<IBook | null> {
