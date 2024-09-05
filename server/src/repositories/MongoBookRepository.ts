@@ -14,7 +14,7 @@ export class MongoBookRepository implements IBookRepository {
   }
 
   async create(book: IBook, image: any): Promise<IBook> {
-    book.image = image;
+    book.image = image.path;
     const newBook = await Book.create(book);
     await this.indexBook(newBook);
     return newBook;
@@ -37,7 +37,8 @@ export class MongoBookRepository implements IBookRepository {
     return false;
   }
 
-  async search(data: string): Promise<Partial<IBook>[]> {
+  async search(data: string) {
+    //async search(data: string): Promise<Partial<IBook>[]> {
     const query = {
       size: 25,
       min_score: 0.5,
@@ -56,12 +57,13 @@ export class MongoBookRepository implements IBookRepository {
         body: query,
       });
 
-      return result.hits.hits.map((hit: any) => ({
-        _id: hit._id,
-        title: hit._source.title,
-        author: hit._source.author,
-        description: hit._source.description,
-      }));
+      // return result.hits.hits.map((hit: any) => ({
+      //   _id: hit._id,
+      //   title: hit._source.title,
+      //   author: hit._source.author,
+      //   description: hit._source.description,
+      //   image: hit._source.image,
+      // }));
     } catch (error) {
       console.error("Error fetching data:", error);
       throw new Error("Failed to perform search");
@@ -77,6 +79,7 @@ export class MongoBookRepository implements IBookRepository {
           title: book.title,
           author: book.author,
           description: book.description,
+          image: book.image,
         },
       });
     } catch (error) {

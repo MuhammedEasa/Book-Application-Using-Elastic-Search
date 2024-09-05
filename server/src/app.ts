@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
-import connectDB from './src/config/database'; 
-import router from './src/routes/BookRoutes'; 
+import connectDB from './config/database'; 
+import router from './routes/BookRoutes'; 
 import path from 'path';
 
 const app = express();

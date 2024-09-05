@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Book } from "@/types/Book";
 
-const API_URL = "http://localhost:5000/";
+const API_URL = "http://localhost:5000";
 
 export const getAllBooks = async (): Promise<Book[]> => {
   const response = await axios.get(`${API_URL}/AllBooks`);

@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { Book } from "@/types/Book";
 import { createBook } from "@/lib/api";
 
@@ -43,19 +43,22 @@ const CreateBookForm = () => {
     if (imageFile) {
       data.append("img", imageFile);
     }
+    console.log("data", data);
 
     await createBook(data);
     router.push("/");
   };
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <h1 className="text-3xl font-bold mb-8">Create New Book</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="max-w-2xl mt-24 mx-auto p-6 bg-slate-400 rounded-lg shadow-md text-gray-800">
+      <h1 className="text-4xl font-bold mb-6 text-center text-gray-800">
+        Create New Book
+      </h1>
+      <form onSubmit={handleSubmit} className="space-y-6">
         <div>
           <label
             htmlFor="title"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-lg font-medium text-gray-700"
           >
             Title
           </label>
@@ -66,13 +69,13 @@ const CreateBookForm = () => {
             value={formData.title}
             onChange={handleChange}
             required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+            className="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-300 focus:ring-opacity-50 p-2"
           />
         </div>
         <div>
           <label
             htmlFor="author"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-lg font-medium text-gray-700"
           >
             Author
           </label>
@@ -83,13 +86,13 @@ const CreateBookForm = () => {
             value={formData.author}
             onChange={handleChange}
             required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+            className="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-300 focus:ring-opacity-50 p-2"
           />
         </div>
         <div>
           <label
             htmlFor="publicationYear"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-lg font-medium text-gray-700"
           >
             Publication Year
           </label>
@@ -100,13 +103,13 @@ const CreateBookForm = () => {
             value={formData.publicationYear}
             onChange={handleChange}
             required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+            className="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-300 focus:ring-opacity-50 p-2"
           />
         </div>
         <div>
           <label
             htmlFor="isbn"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-lg font-medium text-gray-700"
           >
             ISBN
           </label>
@@ -117,13 +120,13 @@ const CreateBookForm = () => {
             value={formData.isbn}
             onChange={handleChange}
             required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+            className="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-300 focus:ring-opacity-50 p-2"
           />
         </div>
         <div>
           <label
             htmlFor="description"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-lg font-medium text-gray-700"
           >
             Description
           </label>
@@ -133,13 +136,13 @@ const CreateBookForm = () => {
             value={formData.description}
             onChange={handleChange}
             rows={4}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+            className="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-300 focus:ring-opacity-50 p-2"
           ></textarea>
         </div>
         <div>
           <label
             htmlFor="image"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-lg font-medium text-gray-700"
           >
             Image
           </label>
@@ -150,12 +153,12 @@ const CreateBookForm = () => {
             accept="image/*"
             onChange={handleFileChange}
             required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+            className="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-300 focus:ring-opacity-50 p-2"
           />
         </div>
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition-colors"
+          className="w-full bg-blue-600 text-white p-3 rounded-md hover:bg-blue-700 transition-colors"
         >
           Create Book
         </button>
