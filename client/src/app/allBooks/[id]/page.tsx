@@ -11,7 +11,7 @@ export default async function BookPage({ params }: { params: { id: string } }) {
   return (
     <div className="max-w-2xl mx-auto p-4">
       <img
-        src={book.image}
+        src={`http://localhost:5000/public/bookImage/${book.image}`}
         alt={book.title}
         className="w-full h-64 object-cover mb-4 rounded"
       />

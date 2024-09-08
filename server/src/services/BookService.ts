@@ -16,8 +16,8 @@ export class BookService {
     return this.bookRepository.create(book,image);
   }
 
-  async updateBook(id: string, book: Partial<IBook>): Promise<IBook | null> {
-    return this.bookRepository.update(id, book);
+  async updateBook(id: string, book: Partial<IBook>,image:any): Promise<IBook | null> {
+    return this.bookRepository.update(id, book,image);
   }
 
   async deleteBook(id: string): Promise<boolean> {

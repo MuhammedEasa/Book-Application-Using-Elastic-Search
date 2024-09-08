@@ -14,13 +14,20 @@ export class MongoBookRepository implements IBookRepository {
   }
 
   async create(book: IBook, image: any): Promise<IBook> {
-    book.image = image.path;
+    book.image = image.filename;
     const newBook = await Book.create(book);
     //  await this.indexBook(newBook);
     return newBook;
   }
 
-  async update(id: string, book: Partial<IBook>): Promise<IBook | null> {
+  async update(
+    id: string,
+    book: Partial<IBook>,
+    image: any
+  ): Promise<IBook | null> {
+    
+    
+    book.image = image.filename;
     const updatedBook = await Book.findByIdAndUpdate(id, book, { new: true });
     // if (updatedBook) {
     //   await this.indexBook(updatedBook);

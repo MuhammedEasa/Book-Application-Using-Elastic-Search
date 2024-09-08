@@ -17,7 +17,7 @@ router.post(
   upload.single("img"),
   bookController.createBook.bind(bookController)
 );
-router.put("/updateBook/:id", bookController.updateBook.bind(bookController));
+router.put("/updateBook/:id", upload.single("img"), bookController.updateBook.bind(bookController));
 router.delete(
   "/deleteBook/:id",
   bookController.deleteBook.bind(bookController)

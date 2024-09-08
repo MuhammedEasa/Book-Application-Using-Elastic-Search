@@ -7,7 +7,7 @@ import path from 'path';
 const app = express();
 
 connectDB();
-app.use(express.static(path.join(__dirname, 'public')));
+app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use(cors());
 app.use(express.json());
 app.use('/', router);

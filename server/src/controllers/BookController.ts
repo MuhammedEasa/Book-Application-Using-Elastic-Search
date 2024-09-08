@@ -30,9 +30,6 @@ export class BookController {
   async createBook(req: Request, res: Response): Promise<void> {
     try {
       const image = req.file 
-      console.log("dsdffsd",image);
-      console.log("req",req.body);
-      
       const book = await this.bookService.createBook(req.body,image);
       res.status(201).json(book);
     } catch (error) {
@@ -42,7 +39,8 @@ export class BookController {
 
   async updateBook(req: Request, res: Response): Promise<void> {
     try {
-      const book = await this.bookService.updateBook(req.params.id, req.body);
+      const image = req.file 
+      const book = await this.bookService.updateBook(req.params.id, req.body,image);
       if (book) {
         res.json(book);
       } else {
