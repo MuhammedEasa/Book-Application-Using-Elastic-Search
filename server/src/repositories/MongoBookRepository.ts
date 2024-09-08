@@ -16,25 +16,25 @@ export class MongoBookRepository implements IBookRepository {
   async create(book: IBook, image: any): Promise<IBook> {
     book.image = image.path;
     const newBook = await Book.create(book);
-    await this.indexBook(newBook);
+    //  await this.indexBook(newBook);
     return newBook;
   }
 
   async update(id: string, book: Partial<IBook>): Promise<IBook | null> {
     const updatedBook = await Book.findByIdAndUpdate(id, book, { new: true });
-    if (updatedBook) {
-      await this.indexBook(updatedBook);
-    }
+    // if (updatedBook) {
+    //   await this.indexBook(updatedBook);
+    // }
     return updatedBook;
   }
 
   async delete(id: string): Promise<boolean> {
     const result = await Book.findByIdAndDelete(id);
-    if (result) {
-      await this.removeBookFromIndex(id);
-      return true;
-    }
-    return false;
+    // if (result) {
+    //   await this.removeBookFromIndex(id);
+    return true;
+    // }
+    // return false;
   }
 
   async search(data: string) {

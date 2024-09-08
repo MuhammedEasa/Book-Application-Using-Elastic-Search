@@ -1,4 +1,3 @@
-import AllBooksComponent from "@/components/AllBooksComponent";
 import SearchComponent from "@/components/SearchComponent";
 import CreateBookButton from "@/components/CreateBookButton";
 
@@ -14,11 +13,6 @@ export default function Home() {
           </div>
         </div>
       </header>
-      <section className="flex-grow p-4">
-        <div className="container mx-auto">
-          <AllBooksComponent />
-        </div>
-      </section>
     </main>
   );
 }
