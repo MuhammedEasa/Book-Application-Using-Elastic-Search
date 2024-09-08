@@ -73,7 +73,7 @@ const CreateBookForm = () => {
 
     try {
       await createBook(data);
-      router.push("/");
+      router.push("/allBooks");
     } catch (error) {
       console.error("Error creating book:", error);
       setErrors({ submit: "Failed to create book. Please try again." });
