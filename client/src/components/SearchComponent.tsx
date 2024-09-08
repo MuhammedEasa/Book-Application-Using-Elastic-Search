@@ -23,8 +23,9 @@ const SearchComponent: React.FC = () => {
 
     try {
       const response = await axios.post('http://localhost:5000/autocomplete', { data: value });
-      const data = response.data.aggregations.auto_complete.buckets;
-      const suggestions = data.map((item: any) => item.key);
+      console.log("response",response);
+      
+      const { suggestions } = response.data;
       setSuggestions(suggestions);
     } catch (error) {
       setError('Failed to fetch suggestions');
@@ -39,7 +40,7 @@ const SearchComponent: React.FC = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 text-black">
       <div className="bg-white shadow-md rounded-lg p-6 sm:p-8 max-w-md w-full">
         <h4 className="text-center text-2xl font-semibold mb-4 text-gray-700">Search as You Type</h4>
         <input

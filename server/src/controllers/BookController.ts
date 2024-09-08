@@ -39,6 +39,8 @@ export class BookController {
 
   async updateBook(req: Request, res: Response): Promise<void> {
     try {
+      console.log("re",req.file);
+      
       const image = req.file 
       const book = await this.bookService.updateBook(req.params.id, req.body,image);
       if (book) {
@@ -71,8 +73,9 @@ export class BookController {
       if (!data) {
         return res.status(400).json({ error: 'Query parameter is required' });
       }
-      const books = await this.bookService.searchBooks(data);
-      res.json(books);
+      const results = await this.bookService.searchBooks(data);
+      const suggestions = results.map(book => book.title);
+      res.json({ suggestions });
     } catch (error) {
       res.status(500).json({ error: 'Internal server error' });
     }

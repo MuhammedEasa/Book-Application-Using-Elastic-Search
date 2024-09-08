@@ -10,7 +10,7 @@ const bookService = new BookService(bookRepository);
 const bookController = new BookController(bookService);
 
 router.get("/AllBooks", bookController.getAllBooks.bind(bookController));
-router.get("/autocomplete", bookController.searchBooks.bind(bookController));
+router.post("/autocomplete", bookController.searchBooks.bind(bookController));
 router.get("/book/:id", bookController.getBookById.bind(bookController));
 router.post(
   "/createBook",
