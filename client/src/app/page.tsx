@@ -20,7 +20,7 @@ export default function Home() {
             <CreateBookButton />
             <button
               onClick={() => router.push('/allBooks')}
-              className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded-full shadow-md transition duration-300 flex items-center"
+              className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-7 rounded-full shadow-md transition duration-300 flex items-center"
             >
               <Library className="mr-2" /> All Books
             </button>

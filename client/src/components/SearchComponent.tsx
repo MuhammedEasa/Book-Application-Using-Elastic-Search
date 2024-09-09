@@ -45,9 +45,9 @@ const SearchComponent: React.FC = () => {
     router.push(`/allBooks/${id}`);
   };
 
-  const handleSubmit = () => {
-    alert(`Submitted: ${inputValue}`);
-  };
+  // const handleSubmit = () => {
+  //   alert(`Submitted: ${inputValue}`);
+  // };
 
   return (
     <div className="relative w-full max-w-md mx-auto text-black">
@@ -80,12 +80,12 @@ const SearchComponent: React.FC = () => {
           ))}
         </ul>
       )}
-      <button
+      {/* <button
         onClick={handleSubmit}
         className="mt-4 w-full bg-blue-500 text-white py-2 px-4 rounded-full hover:bg-blue-600 transition-colors text-sm font-medium"
       >
         Submit
-      </button>
+      </button> */}
     </div>
   );
 };
