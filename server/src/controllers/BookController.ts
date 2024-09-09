@@ -1,6 +1,6 @@
 // backend/src/controllers/BookController.ts
-import { Request, Response } from 'express';
-import { BookService } from '../services/BookService';
+import { Request, Response } from "express";
+import { BookService } from "../services/BookService";
 
 export class BookController {
   constructor(private bookService: BookService) {}
@@ -10,7 +10,7 @@ export class BookController {
       const books = await this.bookService.getAllBooks();
       res.json(books);
     } catch (error) {
-      res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ error: "Internal server error" });
     }
   }
 
@@ -20,36 +20,38 @@ export class BookController {
       if (book) {
         res.json(book);
       } else {
-        res.status(404).json({ error: 'Book not found' });
+        res.status(404).json({ error: "Book not found" });
       }
     } catch (error) {
-      res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ error: "Internal server error" });
     }
   }
 
   async createBook(req: Request, res: Response): Promise<void> {
     try {
-      const image = req.file 
-      const book = await this.bookService.createBook(req.body,image);
+      const image = req.file;
+      const book = await this.bookService.createBook(req.body, image);
       res.status(201).json(book);
     } catch (error) {
-      res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ error: "Internal server error" });
     }
   }
 
   async updateBook(req: Request, res: Response): Promise<void> {
     try {
-      console.log("re",req.file);
-      
-      const image = req.file 
-      const book = await this.bookService.updateBook(req.params.id, req.body,image);
+      const image = req.file;
+      const book = await this.bookService.updateBook(
+        req.params.id,
+        req.body,
+        image
+      );
       if (book) {
         res.json(book);
       } else {
-        res.status(404).json({ error: 'Book not found' });
+        res.status(404).json({ error: "Book not found" });
       }
     } catch (error) {
-      res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ error: "Internal server error" });
     }
   }
 
@@ -59,30 +61,30 @@ export class BookController {
       if (success) {
         res.status(204).send();
       } else {
-        res.status(404).json({ error: 'Book not found' });
+        res.status(404).json({ error: "Book not found" });
       }
     } catch (error) {
-      res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ error: "Internal server error" });
     }
   }
 
   async searchBooks(req: Request, res: Response) {
     try {
       const { data } = req.body;
-  
+
       if (!data) {
-        return res.status(400).json({ error: 'Query parameter is required' });
+        return res.status(400).json({ error: "Query parameter is required" });
       }
       const results = await this.bookService.searchBooks(data);
-      
-      const suggestions = results.map(book => ({
+
+      const suggestions = results.map((book) => ({
         title: book.title,
-        _id: book._id
+        _id: book._id,
       }));
-      
+
       res.json({ suggestions });
     } catch (error) {
-      res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ error: "Internal server error" });
     }
   }
 }

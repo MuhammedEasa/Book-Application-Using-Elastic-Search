@@ -1,5 +1,5 @@
-import { IBookRepository } from '../repositories/IBookRepository';
-import { IBook } from '../models/Book';
+import { IBookRepository } from "../repositories/IBookRepository";
+import { IBook } from "../models/Book";
 
 export class BookService {
   constructor(private bookRepository: IBookRepository) {}
@@ -12,12 +12,16 @@ export class BookService {
     return this.bookRepository.findById(id);
   }
 
-  async createBook(book: IBook,image:any): Promise<IBook> {
-    return this.bookRepository.create(book,image);
+  async createBook(book: IBook, image: any): Promise<IBook> {
+    return this.bookRepository.create(book, image);
   }
 
-  async updateBook(id: string, book: Partial<IBook>,image:any): Promise<IBook | null> {
-    return this.bookRepository.update(id, book,image);
+  async updateBook(
+    id: string,
+    book: Partial<IBook>,
+    image: any
+  ): Promise<IBook | null> {
+    return this.bookRepository.update(id, book, image);
   }
 
   async deleteBook(id: string): Promise<boolean> {
