@@ -74,7 +74,7 @@ export class BookController {
         return res.status(400).json({ error: 'Query parameter is required' });
       }
       const results = await this.bookService.searchBooks(data);
-      const suggestions = results.map(book => book.title);
+      const suggestions = results.map(book => book.title);      
       res.json({ suggestions });
     } catch (error) {
       res.status(500).json({ error: 'Internal server error' });
