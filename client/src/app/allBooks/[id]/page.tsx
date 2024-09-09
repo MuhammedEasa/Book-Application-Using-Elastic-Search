@@ -7,6 +7,7 @@ import { CalendarIcon, BookOpenIcon, HashIcon } from 'lucide-react';
 
 export default async function BookPage({ params }: { params: { id: string } }) {
   const book = await getBookDetails(params.id);
+  const ImageEndPoint = "http://localhost:5000/public/bookImage/";
 
   if (!book) {
     notFound();
@@ -18,7 +19,7 @@ export default async function BookPage({ params }: { params: { id: string } }) {
         <div className="md:flex">
           <div className="md:flex-shrink-0">
             <img
-              src={`http://localhost:5000/public/bookImage/${book.image}`}
+              src={`${ImageEndPoint}${book.image}`}
               alt={book.title}
               className="h-96 w-full object-cover md:w-96"
             />

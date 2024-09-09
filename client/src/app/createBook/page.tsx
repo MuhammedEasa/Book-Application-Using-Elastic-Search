@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Book } from "@/types/Book";
@@ -8,6 +8,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { X } from "lucide-react";
+import Image from "next/image";
+
+type FormErrors = Partial<Record<keyof Book, string>> & { submit?: string };
 
 const CreateBookForm = () => {
   const router = useRouter();
@@ -20,7 +23,7 @@ const CreateBookForm = () => {
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [errors, setErrors] = useState<Partial<Record<keyof Book, string>>>({});
+  const [errors, setErrors] = useState<FormErrors>({});
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -43,7 +46,7 @@ const CreateBookForm = () => {
   };
 
   const validateForm = () => {
-    const newErrors: Partial<Record<keyof Book, string>> = {};
+    const newErrors: FormErrors = {};
     if (!formData.title.trim()) newErrors.title = "Title is required";
     if (!formData.author.trim()) newErrors.author = "Author is required";
     if (!formData.publicationYear)
@@ -76,7 +79,10 @@ const CreateBookForm = () => {
       router.push("/allBooks");
     } catch (error) {
       console.error("Error creating book:", error);
-      setErrors({ submit: "Failed to create book. Please try again." });
+      setErrors((prev) => ({
+        ...prev,
+        submit: "Failed to create book. Please try again.",
+      }));
     }
   };
 

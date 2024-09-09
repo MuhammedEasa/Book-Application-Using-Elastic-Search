@@ -9,6 +9,8 @@ import {
   DeleteOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
+const EditEndPoint = "http://localhost:5000/public/bookImage/";
+const ImageEndPoint = "http://localhost:5000/public/bookImage/";
 const Page = () => {
   const [books, setBooks] = useState<Book[]>([]);
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
@@ -28,7 +30,9 @@ const Page = () => {
     setEditingBook(book);
     form.setFieldsValue({
       ...book,
-      image: book.image ? [{ url: `http://localhost:5000/public/bookImage/${book.image}`, name: book.image }] : []
+      image: book.image
+        ? [{ url: `${EditEndPoint}${book.image}`, name: book.image }]
+        : [],
     });
     setIsEditModalVisible(true);
   };
@@ -42,10 +46,9 @@ const Page = () => {
     }
   };
 
-  
   const handleUpdate = async (values: any) => {
     if (!editingBook) return;
-  
+
     const formData = new FormData();
     Object.keys(values).forEach((key) => {
       if (key === "image") {
@@ -56,7 +59,7 @@ const Page = () => {
         formData.append(key, values[key]);
       }
     });
-  
+
     try {
       await updateBook(editingBook._id, formData);
       message.success("Book updated successfully");
@@ -83,7 +86,7 @@ const Page = () => {
               className="bg-white shadow-lg rounded-lg overflow-hidden transition-transform duration-300 hover:scale-105"
             >
               <img
-                src={`http://localhost:5000/public/bookImage/${book.image}`}
+                src={`${ImageEndPoint}${book.image}`}
                 alt={book.title}
                 className="w-full h-48 object-cover"
               />
@@ -128,66 +131,86 @@ const Page = () => {
         </div>
       )}
 
-<Modal
-  title="Edit Book"
-  open={isEditModalVisible}
-  onCancel={() => setIsEditModalVisible(false)}
-  footer={null}
->
-  <Form form={form} onFinish={handleUpdate} layout="vertical">
-    <Form.Item name="title" label="Title" rules={[{ required: true, message: 'Please input the title!' }]}>
-      <Input />
-    </Form.Item>
-    <Form.Item name="author" label="Author" rules={[{ required: true, message: 'Please input the author!' }]}>
-      <Input />
-    </Form.Item>
-    <Form.Item name="publicationYear" label="Publication Year" rules={[{ required: true, message: 'Please input the publication year!' }]}>
-      <InputNumber style={{ width: '100%' }} />
-    </Form.Item>
-    <Form.Item name="description" label="Description" rules={[{ required: true, message: 'Please input the description!' }]}>
-      <Input.TextArea rows={4} />
-    </Form.Item>
-    <Form.Item name="isbn" label="ISBN" rules={[{ required: true, message: 'Please input the ISBN!' }]}>
-      <Input />
-    </Form.Item>
-    <Form.Item
-      name="image"
-      label="Image"
-      valuePropName="fileList"
-      getValueFromEvent={(e) => {
-        if (Array.isArray(e)) {
-          return e;
-        }
-        return e && e.fileList;
-      }}
-    >
-      <Upload
-        beforeUpload={() => false}
-        listType="picture"
-        maxCount={1}
+      <Modal
+        title="Edit Book"
+        open={isEditModalVisible}
+        onCancel={() => setIsEditModalVisible(false)}
+        footer={null}
       >
-        <Button icon={<UploadOutlined />}>Select New Image</Button>
-      </Upload>
-    </Form.Item>
-    {editingBook && editingBook.image && (
-      <div className="mb-4">
-        <p className="mb-2">Current Image:</p>
-        <img
-          src={`http://localhost:5000/public/bookImage/${editingBook.image}`}
-          alt="Current book cover"
-          className="max-w-full h-auto"
-        />
-      </div>
-    )}
-    <Form.Item>
-      <Button type="primary" htmlType="submit">
-        Update Book
-      </Button>
-    </Form.Item>
-  </Form>
-</Modal>
+        <Form form={form} onFinish={handleUpdate} layout="vertical">
+          <Form.Item
+            name="title"
+            label="Title"
+            rules={[{ required: true, message: "Please input the title!" }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="author"
+            label="Author"
+            rules={[{ required: true, message: "Please input the author!" }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="publicationYear"
+            label="Publication Year"
+            rules={[
+              { required: true, message: "Please input the publication year!" },
+            ]}
+          >
+            <InputNumber style={{ width: "100%" }} />
+          </Form.Item>
+          <Form.Item
+            name="description"
+            label="Description"
+            rules={[
+              { required: true, message: "Please input the description!" },
+            ]}
+          >
+            <Input.TextArea rows={4} />
+          </Form.Item>
+          <Form.Item
+            name="isbn"
+            label="ISBN"
+            rules={[{ required: true, message: "Please input the ISBN!" }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="image"
+            label="Image"
+            valuePropName="fileList"
+            getValueFromEvent={(e) => {
+              if (Array.isArray(e)) {
+                return e;
+              }
+              return e && e.fileList;
+            }}
+          >
+            <Upload beforeUpload={() => false} listType="picture" maxCount={1}>
+              <Button icon={<UploadOutlined />}>Select New Image</Button>
+            </Upload>
+          </Form.Item>
+          {editingBook && editingBook.image && (
+            <div className="mb-4">
+              <p className="mb-2">Current Image:</p>
+              <img
+                src={`${ImageEndPoint}${editingBook.image}`}
+                alt="Current book cover"
+                className="max-w-full h-auto"
+              />
+            </div>
+          )}
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              Update Book
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 };
 
-export default Page
+export default Page;

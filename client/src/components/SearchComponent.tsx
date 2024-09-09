@@ -7,7 +7,7 @@ interface Suggestion {
   title: string;
   _id: string;
 }
-
+const EndPoint='http://localhost:5000/autocomplete'
 const SearchComponent: React.FC = () => {
   const [inputValue, setInputValue] = useState<string>('');
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
@@ -28,7 +28,7 @@ const SearchComponent: React.FC = () => {
     setError(null);
 
     try {
-      const response = await axios.post('http://localhost:5000/autocomplete', { data: value });
+      const response = await axios.post(EndPoint, { data: value });
       console.log("response", response);
       
       const { suggestions } = response.data;
