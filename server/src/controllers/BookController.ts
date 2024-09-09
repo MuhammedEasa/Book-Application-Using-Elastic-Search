@@ -66,15 +66,20 @@ export class BookController {
     }
   }
 
-  async searchBooks(req: Request, res: Response){
+  async searchBooks(req: Request, res: Response) {
     try {
       const { data } = req.body;
-
+  
       if (!data) {
         return res.status(400).json({ error: 'Query parameter is required' });
       }
       const results = await this.bookService.searchBooks(data);
-      const suggestions = results.map(book => book.title);      
+      
+      const suggestions = results.map(book => ({
+        title: book.title,
+        _id: book._id
+      }));
+      
       res.json({ suggestions });
     } catch (error) {
       res.status(500).json({ error: 'Internal server error' });
