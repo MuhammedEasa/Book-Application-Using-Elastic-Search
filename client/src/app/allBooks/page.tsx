@@ -9,6 +9,7 @@ import {
   DeleteOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
+import SearchComponent from "@/components/SearchComponent";
 const EditEndPoint = "http://localhost:5000/public/bookImage/";
 const ImageEndPoint = "http://localhost:5000/public/bookImage/";
 const Page = () => {
@@ -79,55 +80,60 @@ const Page = () => {
           There are no books available.
         </p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {books.map((book) => (
-            <div
-              key={book._id}
-              className="bg-white shadow-lg rounded-lg overflow-hidden transition-transform duration-300 hover:scale-105"
-            >
-              <img
-                src={`${ImageEndPoint}${book.image}`}
-                alt={book.title}
-                className="w-full h-48 object-cover"
-              />
-              <div className="p-4">
-                <h2 className="text-xl font-bold mb-2 text-gray-800">
-                  {book.title}
-                </h2>
-                <p className="text-sm text-gray-600 mb-1">{book.author}</p>
-                <p className="text-sm text-gray-600 mb-2">
-                  {book.publicationYear}
-                </p>
-                <p className="text-sm mb-2 line-clamp-2 text-gray-700">
-                  {book.description}
-                </p>
-                <p className="text-sm mb-4 text-gray-500">ISBN: {book.isbn}</p>
-                <div className="flex justify-between">
-                  <Link href={`/allBooks/${book._id}`} passHref>
-                    <Button type="primary" className="mr-2">
-                      View Details
-                    </Button>
-                  </Link>
-                  <div>
-                    <Button
-                      icon={<EditOutlined />}
-                      onClick={() => handleEdit(book)}
-                      className="mr-2"
-                    >
-                      Edit
-                    </Button>
-                    <Button
-                      icon={<DeleteOutlined />}
-                      danger
-                      onClick={() => handleDelete(book._id)}
-                    >
-                      Delete
-                    </Button>
+        <div>
+          <SearchComponent />
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-10">
+            {books.map((book) => (
+              <div
+                key={book._id}
+                className="bg-white shadow-lg rounded-lg overflow-hidden transition-transform duration-300 hover:scale-105"
+              >
+                <img
+                  src={`${ImageEndPoint}${book.image}`}
+                  alt={book.title}
+                  className="w-full h-48 object-cover"
+                />
+                <div className="p-4">
+                  <h2 className="text-xl font-bold mb-2 text-gray-800">
+                    {book.title}
+                  </h2>
+                  <p className="text-sm text-gray-600 mb-1">{book.author}</p>
+                  <p className="text-sm text-gray-600 mb-2">
+                    {book.publicationYear}
+                  </p>
+                  <p className="text-sm mb-2 line-clamp-2 text-gray-700">
+                    {book.description}
+                  </p>
+                  <p className="text-sm mb-4 text-gray-500">
+                    ISBN: {book.isbn}
+                  </p>
+                  <div className="flex justify-between">
+                    <Link href={`/allBooks/${book._id}`} passHref>
+                      <Button type="primary" className="mr-2">
+                        View Details
+                      </Button>
+                    </Link>
+                    <div>
+                      <Button
+                        icon={<EditOutlined />}
+                        onClick={() => handleEdit(book)}
+                        className="mr-2"
+                      >
+                        Edit
+                      </Button>
+                      <Button
+                        icon={<DeleteOutlined />}
+                        danger
+                        onClick={() => handleDelete(book._id)}
+                      >
+                        Delete
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       )}
 
