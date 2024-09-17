@@ -8,6 +8,7 @@ import {
   EditOutlined,
   DeleteOutlined,
   UploadOutlined,
+  FilterOutlined,
 } from "@ant-design/icons";
 import SearchComponent from "@/components/SearchComponent";
 import Image from "next/image";
@@ -18,20 +19,41 @@ const ImageEndPoint = "http://localhost:5000/public/bookImage/";
 
 const Page: React.FC = () => {
   const [books, setBooks] = useState<Book[]>([]);
+  const [filteredBooks, setFilteredBooks] = useState<Book[]>([]);
   const [isEditModalVisible, setIsEditModalVisible] = useState<boolean>(false);
   const [editingBook, setEditingBook] = useState<Book | null>(null);
   const [form] = Form.useForm();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(8);
+  const [filterType, setFilterType] = useState<string | null>(null);
 
   const retrieve = async (): Promise<void> => {
     const booksData = await getAllBooks();
     setBooks(booksData);
+    setFilteredBooks(booksData);
   };
 
   useEffect(() => {
     retrieve();
   }, []);
+
+  useEffect(() => {
+    filterBooks();
+  }, [filterType, books]);
+
+  const filterBooks = () => {
+    let filtered = [...books];
+    if (filterType === "latest") {
+      filtered.sort((a, b) => b.publicationYear - a.publicationYear);
+    } else if (filterType === "oldest") {
+      filtered.sort((a, b) => a.publicationYear - b.publicationYear);
+    } else if (filterType && filterType !== "all") {
+      const year = parseInt(filterType, 10);
+      filtered = filtered.filter(book => book.publicationYear === year);
+    }
+    setFilteredBooks(filtered);
+    setCurrentPage(1);
+  };
 
   const handleEdit = (book: Book): void => {
     setEditingBook(book);
@@ -78,10 +100,16 @@ const Page: React.FC = () => {
     }
   };
 
-  const paginatedBooks = books.slice(
+  const paginatedBooks = filteredBooks.slice(
     (currentPage - 1) * pageSize,
     currentPage * pageSize
   );
+
+  const yearOptions = Array.from(new Set(books.map(book => book.publicationYear)))
+    .sort((a, b) => b - a)
+    .map(year => (
+      <Option key={year} value={year.toString()}>{year}</Option>
+    ));
 
   return (
     <div className="p-4 bg-gray-100 min-h-screen">
@@ -97,14 +125,29 @@ const Page: React.FC = () => {
         </div>
       ) : (
         <div>
-          <SearchComponent />
+          <div className="flex flex-col sm:flex-row justify-between items-center mb-4 space-y-2 sm:space-y-0">
+            <SearchComponent />
+            <Select
+              style={{ width: '100%', maxWidth: 200 }}
+              placeholder="Filter Books"
+              onChange={(value) => setFilterType(value)}
+              value={filterType}
+              suffixIcon={<FilterOutlined />}
+            >
+              <Option value="all">All Books</Option>
+              <Option value="latest">Latest First</Option>
+              <Option value="oldest">Oldest First</Option>
+              <Option value="year" disabled>Filter by Year</Option>
+              {yearOptions}
+            </Select>
+          </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 mt-5">
             {paginatedBooks.map((book) => (
               <div
                 key={book._id}
                 className="bg-white shadow-lg rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-105"
               >
-                 <div className="relative aspect-[4/4]">
+                 <div className="relative aspect-[4/4] ">
                   <Image
                     src={`${ImageEndPoint}${book.image}`}
                     alt={book.title}
@@ -128,7 +171,7 @@ const Page: React.FC = () => {
                   </p>
                   <div className="flex flex-col sm:flex-row justify-between items-center">
                     <Link href={`/allBooks/${book._id}`} passHref>
-                      <Button type="primary" className="mb-2 sm:mb-0 w-full sm:w-auto">
+                      <Button type="primary" className="mb-1 -ml-3 sm:mb-0 w-full sm:w-auto">
                         View Details
                       </Button>
                     </Link>
@@ -136,7 +179,7 @@ const Page: React.FC = () => {
                       <Button
                         icon={<EditOutlined />}
                         onClick={() => handleEdit(book)}
-                        className="mr-2"
+                        className="-mr-1"
                       >
                         Edit
                       </Button>
@@ -156,7 +199,7 @@ const Page: React.FC = () => {
           <div className="mt-6 flex justify-center">
             <Pagination
               current={currentPage}
-              total={books.length}
+              total={filteredBooks.length}
               pageSize={pageSize}
               onChange={(page) => setCurrentPage(page)}
               showSizeChanger
