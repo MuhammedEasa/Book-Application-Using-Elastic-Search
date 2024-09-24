@@ -59,10 +59,10 @@ const CreateBookForm = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
     if (!validateForm()) return;
-
+  
     const data = new FormData();
     for (const key in formData) {
       data.append(
@@ -73,15 +73,31 @@ const CreateBookForm = () => {
     if (imageFile) {
       data.append("img", imageFile);
     }
-
+  
     try {
-      await createBook(data);
+      const response: any = await createBook(data);
+  
+      if (response.status !== 201) {
+        setErrors((prev) => ({
+          ...prev,
+          submit: "Failed to create book. Please try again.",
+        }));
+        return;
+      }
+  
       router.push("/allBooks");
-    } catch (error) {
+    } catch (error: any) {
+      if (error.response && error.response.status === 400) {
+        setErrors((prev) => ({
+          ...prev,
+          submit: "A book with the same title already exists.",
+        }));
+        return;
+      }
       console.error("Error creating book:", error);
       setErrors((prev) => ({
         ...prev,
-        submit: "Failed to create book. Please try again.",
+        submit: "An error occurred while creating the book. Please try again.",
       }));
     }
   };
