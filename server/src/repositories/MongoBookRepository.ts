@@ -28,12 +28,17 @@ export class MongoBookRepository implements IBookRepository {
   async findById(id: string): Promise<IBook | null> {
     return Book.findById(id);
   }
-  async create(book: IBook, image: any): Promise<IBook> {
+  async create(book: IBook, image: any): Promise<IBook | null> {
+    const newBookTitle = book.title.trim();
+    const existingBook = await Book.findOne({
+        title: { $regex: new RegExp(`^${newBookTitle}$`, 'i') }
+    });
+    if (existingBook) return null;
     book.image = image.filename;
     const newBook = await Book.create(book);
     await this.indexBook(newBook);
     return newBook;
-  }
+}
 
   async update(
     id: string,

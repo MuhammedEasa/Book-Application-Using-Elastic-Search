@@ -12,7 +12,7 @@ export class BookService {
     return this.bookRepository.findById(id);
   }
 
-  async createBook(book: IBook, image: any): Promise<IBook> {
+  async createBook(book: IBook, image: any): Promise<IBook | null> {
     return this.bookRepository.create(book, image);
   }
 

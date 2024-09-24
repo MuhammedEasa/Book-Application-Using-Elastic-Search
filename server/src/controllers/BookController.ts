@@ -31,11 +31,16 @@ export class BookController {
     try {
       const image = req.file;
       const book = await this.bookService.createBook(req.body, image);
+      if (!book) {
+        res.status(400).json({ message: 'A book with the same title already exists.' });
+        return;
+      }
       res.status(201).json(book);
     } catch (error) {
-      res.status(500).json({ error: "Internal server error" });
+      res.status(500).json({ error: 'Internal server error' });
     }
-  }
+}
+
 
   async updateBook(req: Request, res: Response): Promise<void> {
     try {
